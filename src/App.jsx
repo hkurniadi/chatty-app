@@ -3,8 +3,11 @@ import React, {Component} from 'react';
 class App extends Component {
   render() {
     return (
-      <h1>Hello React :)</h1>
+    <nav className="navbar">
+      <a href="/" className="navbar-brand">Chatty</a>
+    </nav>
     );
   }
 }
+
 export default App;

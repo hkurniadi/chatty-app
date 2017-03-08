@@ -19,29 +19,33 @@ class App extends Component {
       ],
       systemNotifications: {}
     };
+
+    this.socket = new WebSocket("ws://localhost:3001");
+
     this.showNewMessage = this.showNewMessage.bind(this);
+    this.sendMessageToServer = this.sendMessageToServer.bind(this);
   }
 
   showNewMessage(newMessage) {
-    let message = this.state.messages.concat({
+    let msg = this.state.messages.concat({
       username: this.state.currentUser.name,
       content: newMessage
     });
-    this.setState({messages: message});
+    this.setState({messages: msg});
   }
 
-  // componentDidMount() {
-  //   console.log("componentDidMount <App />");
-  //   setTimeout(() => {
-  //     console.log("Simulating incoming message");
-  //     // Add a new message to the list of messages in the data store
-  //     const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-  //     const messages = this.state.messages.concat(newMessage)
-  //     // Update the state of the app component.
-  //     // Calling setState will trigger a call to render() in App and all child components.
-  //     this.setState({messages: messages})
-  //   }, 3000);
-  // }
+  sendMessageToServer(msg) {
+    console.log('Message is', msg);
+    this.socket.send(JSON.stringify(msg));
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount <App />");
+
+    this.socket.onopen = () => {
+      console.log('Connected to server');
+    }
+  }
 
   render() {
     console.log('Rendering <App />');
@@ -51,7 +55,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} systemNotifications={this.state.systemNotifications} />
-        <ChatBar currentUser={this.state.currentUser.name} showNewMessage={this.showNewMessage} />
+        <ChatBar currentUser={this.state.currentUser.name} handleSubmit={this.sendMessageToServer} />
       </div>
     );
   }

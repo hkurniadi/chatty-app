@@ -4,16 +4,10 @@ class Message extends Component {
   render() {
   console.log('Rendering <Message />');
     return (
-        <ul>
-        {this.props.messages.map((message) => {
-          return (
-          <li key={message.id}>
-            <span className="message-username">{message.username}</span>
-            <span className="message-content">{message.content}</span>
-          </li>
-          );
-        })}
-      </ul>
+      <div>
+        <span className="message-username">{this.props.username}</span>
+        <span className="message-content">{this.props.content}</span>
+      </div>
     );
   }
 }

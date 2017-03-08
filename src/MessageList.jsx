@@ -9,7 +9,15 @@ class MessageList extends Component {
     return (
       <main className="messages">
         <div className="message">
-          <Message messages={this.props.messages} />
+          <ul>
+          {this.props.messages.map((message) => {
+            return (
+            <li key={message.id}>
+                <Message username={message.username} content={message.content} />
+            </li>
+            );
+          })}
+          </ul>
         </div>
         <div className="message system">
           Anonymous1 changed their name to nomnom.

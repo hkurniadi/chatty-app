@@ -7,6 +7,7 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+
       messages: [
         {
           username: "Bob",
@@ -17,7 +18,8 @@ class App extends Component {
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
       ],
-      systemNotifications: {}
+
+      notifications: ''
     };
 
     this.socket = new WebSocket("ws://localhost:3001");
@@ -61,12 +63,21 @@ class App extends Component {
 
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
-      let newMessage = this.state.messages.concat({
-        key: data.key,
-        username: data.username,
-        content: data.content
-      })
-      this.addNewMessage(newMessage);
+      let type = data.type;
+
+      switch (type) {
+        case 'incomingMessage':
+          let newMessage = this.state.messages.concat({
+            key: data.key,
+            username: data.username,
+            content: data.content
+          })
+          this.addNewMessage(newMessage);
+          break;
+        case 'incomingNotification':
+          this.state.notification = data.notificationMessage;
+          break;
+      }
     }
   }
 

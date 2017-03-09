@@ -10,11 +10,11 @@ class MessageList extends Component {
       <main className="messages">
           {this.props.messages.map((message, index) => {
             return (
-              <Message username={message.username} content={message.content} key={message.key} />
+              <Message key={message.key} username={message.username} content={message.content}  />
             );
           })}
         <div className="message system">
-          { (this.props.systemNotifications) ? <Message name={this.props.systemNotifications.name} systemMessage={this.props.systemNotifications.message} /> : null}
+          { (this.props.notification) ? this.props.notification : null }
         </div>
       </main>
     );

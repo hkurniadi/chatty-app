@@ -7,7 +7,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Bob", style: {}}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
       activeUsers: ''
     };
@@ -60,7 +60,6 @@ class App extends Component {
       let data = JSON.parse(event.data);
       console.log('data are', data);
       let type = data.type;
-      console.log('type is', type);
 
       switch (type) {
         case "incomingMessage":
@@ -69,10 +68,12 @@ class App extends Component {
             key: data.key,
             type: type,
             username: data.username,
-            content: data.content
+            content: data.content,
+            color: data.color
           })
           this.addNewMessage(newMessage);
           break;
+
         case "incomingNotification":
           // let newNotification = this.state.messages.concat({data});
           let newNotification = this.state.messages.concat({
@@ -82,9 +83,11 @@ class App extends Component {
           })
           this.addNewMessage(newNotification);
           break;
+
         case "activeUsers":
           this.changeNumOfOnlineUsers(data.counts);
           break;
+
         default:
           // show an error in the console if the message type is unknown
           throw new Error("Unknown event type " + type);
@@ -100,7 +103,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
           <a className="num-users">{this.state.activeUsers + " users online"}</a>
         </nav>
-        <MessageList messages={this.state.messages} />
+        <MessageList messages={this.state.messages}/>
         <ChatBar
           currentUser={this.state.currentUser.name}
           handleNewMessage={this.sendMessageToServer}

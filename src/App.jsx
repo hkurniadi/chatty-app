@@ -35,12 +35,21 @@ class App extends Component {
     this.setState({currentUser: {name: newUsername}});
   }
 
-  sendMessageToServer(newMessage) {
-    let newChat = {
-      username: this.state.currentUser.name,
-      content: newMessage
-    };
-    this.socket.send(JSON.stringify(newChat));
+  sendMessageToServer(message, type) {
+    if (type === 'postMessage') {
+      let newChat = {
+        type: type,
+        username: this.state.currentUser.name,
+        content: message
+      };
+      this.socket.send(JSON.stringify(newChat));
+    } else if (type === 'postNotification') {
+      let newNotification = {
+        type: type,
+        notificationMessage: message
+      };
+      this.socket.send(JSON.stringify(newNotification));
+    }
   }
 
   componentDidMount() {

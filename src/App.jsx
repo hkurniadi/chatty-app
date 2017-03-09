@@ -18,8 +18,6 @@ class App extends Component {
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
       ],
-
-      notification: ''
     };
 
     this.socket = new WebSocket("ws://localhost:3001");
@@ -69,17 +67,21 @@ class App extends Component {
 
       switch (type) {
         case "incomingMessage":
-          console.log("it's entering", type);
           let newMessage = this.state.messages.concat({
             key: data.key,
+            type: type,
             username: data.username,
             content: data.content
           })
           this.addNewMessage(newMessage);
           break;
         case "incomingNotification":
-          console.log("it's entering", type);
-          this.setState({notification: data.notificationMessage});
+          let newNotification = this.state.messages.concat({
+            key: data.key,
+            type: type,
+            content: data.notificationMessage
+          })
+          this.addNewMessage(newNotification);
           break;
         default:
           // show an error in the console if the message type is unknown
@@ -95,10 +97,7 @@ class App extends Component {
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
-        <MessageList
-          messages={this.state.messages}
-          notification={this.state.notification}
-        />
+        <MessageList messages={this.state.messages} />
         <ChatBar
           currentUser={this.state.currentUser.name}
           handleNewMessage={this.sendMessageToServer}

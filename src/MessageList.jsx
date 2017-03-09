@@ -10,12 +10,14 @@ class MessageList extends Component {
       <main className="messages">
           {this.props.messages.map((message, index) => {
             return (
-              <Message key={message.key} username={message.username} content={message.content}  />
+              <Message
+                key={message.key}
+                type={message.type}
+                username={message.username}
+                content={message.content}
+              />
             );
           })}
-        <div className="message system">
-          { (this.props.notification) ? this.props.notification : null }
-        </div>
       </main>
     );
   }

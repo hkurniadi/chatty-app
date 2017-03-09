@@ -22,21 +22,25 @@ class App extends Component {
 
     this.socket = new WebSocket("ws://localhost:3001");
 
-    this.showNewMessage = this.showNewMessage.bind(this);
+    this.addNewMessage = this.addNewMessage.bind(this);
+    this.changeCurrentUser = this.changeCurrentUser.bind(this);
     this.sendMessageToServer = this.sendMessageToServer.bind(this);
   }
 
-  showNewMessage(newMessage) {
-    let msg = this.state.messages.concat({
-      username: this.state.currentUser.name,
-      content: newMessage
-    });
-    this.setState({messages: msg});
+  addNewMessage(newMessage) {
+    this.setState({messages: newMessage});
   }
 
-  sendMessageToServer(msg) {
-    console.log('Message is', msg);
-    this.socket.send(JSON.stringify(msg));
+  changeCurrentUser(newUsername) {
+    this.setState({currentUser: {name: newUsername}});
+  }
+
+  sendMessageToServer(newMessage) {
+    let newChat = {
+      username: this.state.currentUser.name,
+      content: newMessage
+    };
+    this.socket.send(JSON.stringify(newChat));
   }
 
   componentDidMount() {
@@ -44,6 +48,16 @@ class App extends Component {
 
     this.socket.onopen = () => {
       console.log('Connected to server');
+    }
+
+    this.socket.onmessage = (event) => {
+      let data = JSON.parse(event.data);
+      let newMessage = this.state.messages.concat({
+        key: data.key,
+        username: data.username,
+        content: data.content
+      })
+      this.addNewMessage(newMessage);
     }
   }
 
@@ -54,8 +68,15 @@ class App extends Component {
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
-        <MessageList messages={this.state.messages} systemNotifications={this.state.systemNotifications} />
-        <ChatBar currentUser={this.state.currentUser.name} handleSubmit={this.sendMessageToServer} />
+        <MessageList
+          messages={this.state.messages}
+          systemNotifications={this.state.systemNotifications}
+        />
+        <ChatBar
+          currentUser={this.state.currentUser.name}
+          handleNewMessage={this.sendMessageToServer}
+          handleNewUsername={this.changeCurrentUser}
+        />
       </div>
     );
   }

@@ -2,21 +2,19 @@ import React, {Component} from 'react';
 
 class ChatBar extends Component {
 
-  handleSubmitChat(event) {
-    console.log("Chat message is:", event.target.value);
+  //These handlers just send the new values back to the parent - 'Actions Up'
+  handleSubmitName(event) {
     if (event.key === "Enter") {
-      this.props.handleSubmit(event.target.value);
-      // document.querySelector('.chatbar-message').value="";
-      event.target.value = '';
+      this.props.handleNewUsername(event.target.value);
     }
   }
 
-  // handleUserName(event) {
-  //   console.log("Username is:", event.target.value);
-  //   if (event.key === "Enter") {
-  //     this.props.
-  //   }
-  // }
+  handleSubmitChat(event) {
+    if (event.key === "Enter") {
+      this.props.handleNewMessage(event.target.value);
+      event.target.value = '';
+    }
+  }
 
   render() {
   console.log('Rendering <ChatBar />');
@@ -26,6 +24,7 @@ class ChatBar extends Component {
         className="chatbar-username"
         defaultValue={this.props.currentUser}
         placeholder="Your Name (Optional)"
+        onKeyPress={this.handleSubmitName.bind(this)}
       />
       <input
         className="chatbar-message"

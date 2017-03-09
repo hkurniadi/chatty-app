@@ -7,6 +7,9 @@ class ChatBar extends Component {
     if (event.key === "Enter") {
       let type = 'postNotification';
       let newUsername = event.target.value;
+      if (!newUsername) {
+        newUsername = "Anonymous";
+      }
       let notificationMessage = "User " + this.props.currentUser + " changed their name to " + newUsername;
       this.props.handleNewMessage(notificationMessage, type);
       this.props.handleNewUsername(newUsername);

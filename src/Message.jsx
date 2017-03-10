@@ -15,7 +15,7 @@ class Message extends Component {
           <span className="message-content">
             {this.props.content.replace(/\bhttps?\S+(\.png|\.jpg|\.gif)\b/, "")}
             {/\bhttps?\S+(\.png|\.jpg|\.gif)\b/.test(this.props.content) ?
-              <img src={/\bhttps?\S+(\.png|\.jpg|\.gif)\b/.exec(this.props.content)[0]} />
+              <img className="url-img" src={/\bhttps?\S+(\.png|\.jpg|\.gif)\b/.exec(this.props.content)[0]} />
               :
               null
             }
